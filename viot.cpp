@@ -10,14 +10,14 @@ PubSubClient mqtt;
 
 viot::viot(){
 	Serial.println("viot initialized with no options..");
-	setServer("192.168.0.106", 1883);
+	setServer("mqtt.viot.co.uk", 1883);
 }
 
 viot::viot(Client& client){
 	delay(500);
-	Serial.println("viot initialize dwith client");
+	Serial.println("viot initialized with client");
 	setClient(client);
-	setServer("192.168.0.106", 1883);
+	setServer("mqtt.viot.co.uk", 1883);
 }
 
 viot& viot::setServer(const char * domain, uint16_t port) {

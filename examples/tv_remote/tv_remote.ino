@@ -9,32 +9,33 @@ const uint16_t kIrLed = 4;  // ESP8266 GPIO pin to use. Recommended: 4 (D2).
 IRsend irsend(kIrLed);  // Set the GPIO to be used to sending the message.
 
 
-const char* ssid = "Mani's sick WiFi";
-const char* password = "ketamine";
-const char* apiKey = "6da37620264bdaf6c306ab6a684ce2ef00a044ef5a7b8ce576466c6014352f74";
+const char* ssid = "6 Cemetery Avenue - 2.4";
+const char* password = "20551599";
+const char* apiKey = "3cf9476e0cdf9c510a237491e7d00f8edce673ecede357b807d25fa2faa125a5";
 
 WiFiClient espClient;
 viot viotClient(espClient);
 
-void tv_power(DynamicJsonDocument doc){ irsend.sendRC5(0xC, 12); }
-void menu(DynamicJsonDocument doc){ irsend.sendRC5(0x30, 12); }
-void up(DynamicJsonDocument doc){ irsend.sendRC5(0x14, 12); }
-void left(DynamicJsonDocument doc){ irsend.sendRC5(0x15, 12); }
-void right(DynamicJsonDocument doc){ irsend.sendRC5(0x16, 12); }
-void down(DynamicJsonDocument doc){ irsend.sendRC5(0x13, 12); }
-void ok(DynamicJsonDocument doc){ irsend.sendRC5(0x35, 12); }
-void qmenu(DynamicJsonDocument doc){ irsend.sendRC5(0x2B, 12); }
-void back(DynamicJsonDocument doc){ irsend.sendRC5(0xA, 12); }
-void _exit(DynamicJsonDocument doc){ irsend.sendRC5(0x25, 12); }
-void volume_up(DynamicJsonDocument doc){ irsend.sendRC5(0x10, 12); }
-void volume_down(DynamicJsonDocument doc){ irsend.sendRC5(0x11, 12); }
-void channel_up(DynamicJsonDocument doc){ irsend.sendRC5(0x20, 12); }
-void channel_down(DynamicJsonDocument doc){ irsend.sendRC5(0x21, 12); }
-void mute(DynamicJsonDocument doc){ irsend.sendRC5(0xD, 12); }
-void info(DynamicJsonDocument doc){ irsend.sendRC5(0x12, 12); }
-void netflix(DynamicJsonDocument doc){ irsend.sendRC5(0x27, 12); }
-void input(DynamicJsonDocument doc){ irsend.sendRC5(0x38, 12); }
-void youtube(DynamicJsonDocument doc){ irsend.sendRC5(0x3B, 12); }
+void tv_power(DynamicJsonDocument doc){ irsend.sendNEC(0x2FD48B7, 32); }
+void menu(DynamicJsonDocument doc){ irsend.sendNEC(0x27D2CD3, 32); }
+void up(DynamicJsonDocument doc){ irsend.sendNEC(0x2FD9867, 32); }
+void left(DynamicJsonDocument doc){ irsend.sendNEC(0x2FD42BD, 32); }
+void right(DynamicJsonDocument doc){ irsend.sendNEC(0x2FD02FD, 32); }
+void down(DynamicJsonDocument doc){ irsend.sendNEC(0x2FDB847, 32); }
+void ok(DynamicJsonDocument doc){ irsend.sendNEC(0x2FD847B, 32); }
+void back(DynamicJsonDocument doc){ irsend.sendNEC(0x2FD26D9, 32); }
+void _exit(DynamicJsonDocument doc){ irsend.sendNEC(0x2FDC23D, 32); }
+
+void volume_up(DynamicJsonDocument doc){ irsend.sendNEC(0x2FD58A7, 32); }
+void volume_down(DynamicJsonDocument doc){ irsend.sendNEC(0x2FD7887, 32); }
+
+void channel_up(DynamicJsonDocument doc){ irsend.sendNEC(0x2FDD827, 32); }
+void channel_down(DynamicJsonDocument doc){ irsend.sendNEC(0x2FDF807, 32); }
+void mute(DynamicJsonDocument doc){ irsend.sendNEC(0x2FD08F7, 32); }
+void info(DynamicJsonDocument doc){ irsend.sendNEC(0x2FD6897, 32); }
+void netflix(DynamicJsonDocument doc){ irsend.sendNEC(0x27D54AB, 32); }
+void input(DynamicJsonDocument doc){ irsend.sendNEC(0x2FD28D7, 32); }
+void fp(DynamicJsonDocument doc){ irsend.sendNEC(0x27DE11E, 32); }
 
 void setup_wifi() {
 
@@ -77,7 +78,7 @@ void setup(){
     Serial.begin(9600);
     irsend.begin();
     setup_wifi();
-    viotClient.setServer("192.168.0.108", 1883);
+//    viotClient.setServer("192.168.0.\108", 1883);
     viotClient.setApiKey(apiKey);
     viotClient.setClient(espClient);
     // viotClient.setTemplate(viotTemplate);
@@ -85,6 +86,8 @@ void setup(){
 
     if(!viotClient.connected())
         reconnect();
+
+      
 
     // Serial.println(strlen(viotTemplate));
 
@@ -96,7 +99,6 @@ void setup(){
     viotClient.on("right", right);
     viotClient.on("down", down);
     viotClient.on("ok", ok);
-    viotClient.on("q-menu", qmenu);
     viotClient.on("back", back);
     viotClient.on("exit", _exit);
     viotClient.on("volume-up", volume_up);
@@ -107,7 +109,7 @@ void setup(){
     viotClient.on("info", info);
     viotClient.on("netflix", netflix);
     viotClient.on("input", input);
-    viotClient.on("youtube", youtube);
+    viotClient.on("freeview-play", fp);
 
     
 
